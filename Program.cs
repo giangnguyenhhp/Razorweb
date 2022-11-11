@@ -40,3 +40,9 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+/*CREATE , READ, UPDATE, DELETE ( CRUD )
+ *
+ * dotnet aspnet-codegenerator razorpage -m ASP12_RazorPage_EntityFramework.Models.Article -dc ASP12_RazorPage_EntityFramework.Models.MasterDbContext -outDir Pages/Blog -udl --referenceScriptLibraries
+ * 
+ */
