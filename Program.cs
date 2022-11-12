@@ -36,8 +36,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options => // IdentityOptions
         options.Password.RequiredUniqueChars = 1; // Số kí tự riêng biệt
     
         // Cấu hình lockout - khóa user
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
-        options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần là khóa
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2); // Khóa 2 phút
+        options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 3 lần là khóa
         options.Lockout.AllowedForNewUsers = true;
     
         // Cấu hình về user
@@ -48,7 +48,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options => // IdentityOptions
         // Cấu hình đăng nhập
         options.SignIn.RequireConfirmedEmail = true; // Yêu cầu confrim Email
         options.SignIn.RequireConfirmedPhoneNumber = false; //Yêu cầu confrim sđt
-        options.SignIn.RequireConfirmedAccount = false; // Yêu cầu xác minh tài khoản
+        options.SignIn.RequireConfirmedAccount = true; // Yêu cầu xác minh tài khoản
     })
     .AddEntityFrameworkStores<MasterDbContext>()
     .AddDefaultTokenProviders();

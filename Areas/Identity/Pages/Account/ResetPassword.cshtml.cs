@@ -47,8 +47,9 @@ namespace ASP12_RazorPage_EntityFramework.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} phải có độ dài từ {2} đến {1} kí tự", MinimumLength = 6)]
             [DataType(DataType.Password)]
+            [Display(Name = "Nhập mật khẩu mới")]
             public string Password { get; set; }
 
             /// <summary>
@@ -56,8 +57,8 @@ namespace ASP12_RazorPage_EntityFramework.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Lặp lại mật khẩu")]
+            [Compare("Password", ErrorMessage = "Mật khẩu và mật khẩu lặp lại không trùng nhau")]
             public string ConfirmPassword { get; set; }
 
             /// <summary>
@@ -73,7 +74,7 @@ namespace ASP12_RazorPage_EntityFramework.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("Mã token không chính xác");
             }
             else
             {
