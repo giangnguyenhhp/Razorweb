@@ -1,0 +1,35 @@
+﻿@using ASP12_RazorPage_EntityFramework.Models
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject SignInManager<User> SigInManager;
+@inject UserManager<User> UserManager;
+
+@{
+    // SigInManager.IsSignedIn(User) // Kiểm tra user có đang đăng nhập hay không
+    // UserManager.GetUserName(User) //Lấy tên user đăng nhập
+}
+
+<ul class="navbar-nav">
+
+    @if (SigInManager.IsSignedIn(User))
+    {
+        <li class="navbar-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
+                Xin chào @UserManager.GetUserName(User)
+            </a>
+        </li>
+        <li class="navbar-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Đăng xuất</a>
+        </li>
+    }
+    else
+    {
+        <li class="navbar-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Đăng kí</a>
+        </li>
+        <li class="navbar-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a>
+        </li>
+    }
+</ul>
