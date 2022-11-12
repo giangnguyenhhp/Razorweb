@@ -25,44 +25,46 @@ builder.Services.AddDbContext<MasterDbContext>(options
 
 
 //Đăng kí Identity Framework cho ứng dụng
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options => // IdentityOptions
+    {
+        //Thiết lập về password 
+        options.Password.RequireDigit = false; //Không bắt phải có số
+        options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+        options.Password.RequireUppercase = false; //Không bắt phải có chữ hoa
+        options.Password.RequireNonAlphanumeric = false; //Không bắt phải có kí tự đặc biệt
+        options.Password.RequiredLength = 3; // Độ dài tối thiểu 3 kí tự
+        options.Password.RequiredUniqueChars = 1; // Số kí tự riêng biệt
+    
+        // Cấu hình lockout - khóa user
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
+        options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần là khóa
+        options.Lockout.AllowedForNewUsers = true;
+    
+        // Cấu hình về user
+        options.User.AllowedUserNameCharacters = // các kí tự đặt tên user
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        options.User.RequireUniqueEmail = true; // Email là duy nhất
+    
+        // Cấu hình đăng nhập
+        options.SignIn.RequireConfirmedEmail = true; // Yêu cầu confrim Email
+        options.SignIn.RequireConfirmedPhoneNumber = false; //Yêu cầu confrim sđt
+        options.SignIn.RequireConfirmedAccount = false; // Yêu cầu xác minh tài khoản
+    })
     .AddEntityFrameworkStores<MasterDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login/";
+    options.LogoutPath = "/logout/";
+    options.AccessDeniedPath = "/khongduoctruycap.html";
+});
 
 //Đăng kí Identity UI : giao diện mặc định hệ thống tự sinh ra
 // builder.Services.AddDefaultIdentity<User>()
 //     .AddEntityFrameworkStores<MasterDbContext>()
 //     .AddDefaultTokenProviders();
 
-//builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MasterDbContext>().AddDefaultTokenProviders();
-
-
-//Truy cập IdentityOptions
-builder.Services.Configure<IdentityOptions>( options =>
-{
-    //Thiết lập về password 
-    options.Password.RequireDigit = false; //Không bắt phải có số
-    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-    options.Password.RequireUppercase = false; //Không bắt phải có chữ hoa
-    options.Password.RequireNonAlphanumeric = false; //Không bắt phải có kí tự đặc biệt
-    options.Password.RequiredLength = 3; // Độ dài tối thiểu 3 kí tự
-    options.Password.RequiredUniqueChars = 1; // Số kí tự riêng biệt
-    
-    // Cấu hình lockout - khóa user
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
-    options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần là khóa
-    options.Lockout.AllowedForNewUsers = true;
-    
-    // Cấu hình về user
-    options.User.AllowedUserNameCharacters = // các kí tự đặt tên user
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = true; // Email là duy nhất
-    
-    // Cấu hình đăng nhập
-    options.SignIn.RequireConfirmedEmail = true; // Yêu cầu confrim Email
-    options.SignIn.RequireConfirmedPhoneNumber = false; //Yêu cầu confrim sđt
-
-} );
 
 var app = builder.Build();
 

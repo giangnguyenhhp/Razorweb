@@ -1,10 +1,12 @@
 using ASP12_RazorPage_EntityFramework.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASP12_RazorPage_EntityFramework.Pages.Blog
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly MasterDbContext _context;
