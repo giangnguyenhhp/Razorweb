@@ -12,6 +12,7 @@ builder.Services.AddOptions();
 var mailSetting = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSetting);
 builder.Services.AddSingleton<IEmailSender, SendMailService>();
+builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -98,7 +99,20 @@ app.Run();
  *
  * Identity :
  *      - Authentication : Xác định danh tính : Login, Logout,..
+ * 
  *      - Authorization : Xác định quyền truy cập
+            Role - based authorization : xác thực quyền theo vai trò
+            Role (vai trò) : Admin, Editor, Manager, Member,...
+            
+            /Areas/Admin/Pages/Role
+            Index
+            Create
+            Edit
+            Delete
+            
+            [Authorize] - Controller, Action, PageModel
+            
+
  *      - Quản lý User : Signup, User, Role
  *
  

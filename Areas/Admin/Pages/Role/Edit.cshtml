@@ -1,0 +1,41 @@
+﻿@page
+@model ASP12_RazorPage_EntityFramework.Areas.Admin.Pages.Role.Edit
+
+@{
+    ViewData["Title"] = "Cập nhật Role";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+<div>
+    <h1>@ViewData["Title"]</h1>
+    <partial name="_StatusMessage" model="@Model.StatusMessage"/>
+</div>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Name" class="form-control" autocomplete="name" aria-required="true" placeholder="name" />
+                <label asp-for="Input.Name"></label>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group py-3">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                <a class="btn btn-primary" asp-page="./Index">Danh sách các Role</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

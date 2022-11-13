@@ -1,0 +1,41 @@
+﻿@page
+@model ASP12_RazorPage_EntityFramework.Areas.Admin.Pages.Role.Index
+
+
+@{
+    ViewData["Title"] = "Danh sách các Role";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <h1>@ViewData["Title"]</h1>
+</div>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<div class="my-2">
+    <a class="btn btn-primary" asp-page="./Create">Tạo role mới</a>
+    <a class="btn btn-primary" asp-page="../User/Index">Quản lý thành viên</a>
+</div>
+<table class="table">
+    <tr>
+        <th>Tên Role (vai trò)</th>
+        <th>Tác vụ</th>
+    </tr>
+    @foreach (var role in Model.Roles)
+    {
+        <tr>
+            <td class="">@role.Name</td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-roleid="@role.Id">Cập nhật</a>
+                <a class="btn btn-success btn-sm" asp-page="./Delete" asp-route-roleid="@role.Id">Xóa</a>
+            </td>
+        </tr>
+    }
+</table>
+</body>
+</html>

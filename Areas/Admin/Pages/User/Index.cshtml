@@ -1,0 +1,60 @@
+﻿@page
+@model ASP12_RazorPage_EntityFramework.Areas.Admin.Pages.User.Index
+
+
+
+@{
+    ViewData["Title"] = "Danh sách các thành viên";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <h1>@ViewData["Title"]</h1>
+</div>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<p>Tổng số thành viên : @Model.totalUser</p>
+<table class="table">
+    <tr>
+        <th>Tên User</th>
+        <th>Vai trò của User (role)</th>
+        <th>Tác vụ</th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td class="">@user.UserName</td>
+            <td>
+                @if (string.IsNullOrEmpty(user.RoleName))
+                {
+                    <a class="text-dark" asp-page="./AddRole" asp-route-id="@user.Id">+ Thêm Roles</a>
+                }
+                else
+                {
+                    <a asp-page="./AddRole" asp-route-id="@user.Id">@user.RoleName</a>
+                }
+
+            </td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-area="Admin" asp-page="./SetPassword" asp-route-id="@user.Id">Đặt mật khẩu</a>
+                <a class="btn btn-success btn-sm" asp-page="./Delete" asp-route-id="@user.Id">Xóa</a>
+            </td>
+        </tr>
+    }
+</table>
+</body>
+</html>
+@{
+    var pagingmodel = new ASP12_RazorPage_EntityFramework.Helpers.PagingModel
+    {
+        currentPage = Model.currentPage,
+        countPages = Model.countPages,
+        generateUrl = p => Url.Page("./Index", new { p })
+    };
+}
+<partial name="_Paging" model="@pagingmodel"/>
