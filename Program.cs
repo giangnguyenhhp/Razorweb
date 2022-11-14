@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Security.Claims;
 using ASP12_RazorPage_EntityFramework.Models;
 using ASP12_RazorPage_EntityFramework.Services;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 //Add SendEmail Service
 builder.Services.AddOptions();
 var mailSetting = builder.Configuration.GetSection("MailSettings");
+
+//Add Service
 builder.Services.Configure<MailSettings>(mailSetting);
 builder.Services.AddSingleton<IEmailSender, SendMailService>();
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
@@ -61,6 +64,32 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/khongduoctruycap.html";
 });
 
+//Add Service Authorization Policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllowEditRole", policyBuilder =>
+    {
+        //Điều kiện của Policy
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.RequireRole("Admin");
+        policyBuilder.RequireRole("Editor");
+        
+        //Claims-based authorization
+        // policyBuilder.RequireClaim("ClaimName", "giatri1", "giatri2");
+        // policyBuilder.RequireClaim("ClaimType", new string[]
+        // {
+        //     "giatri1", "giatri2"
+        // });
+        // IdentityRoleClaim<string> claim1;
+        // IdentityUserClaim<string> claim2;
+        // Claim claim3;
+    });
+    // options.AddPolicy("PolicyName2", policyBuilder =>
+    // {
+    //     //Điều kiện của Policy
+    // });
+});
+
 //Đăng kí Identity UI : giao diện mặc định hệ thống tự sinh ra
 // builder.Services.AddDefaultIdentity<User>()
 //     .AddEntityFrameworkStores<MasterDbContext>()
@@ -103,6 +132,17 @@ app.Run();
  *      - Authorization : Xác định quyền truy cập
             Role - based authorization : xác thực quyền theo vai trò
             Role (vai trò) : Admin, Editor, Manager, Member,...
+            
+            Policy-based authorization
+            Claims-based authorization
+                Claims -> Đặc tính, tính chất của đối tượng (User)
+                
+                Bằng lái B2(Role) -> Được lái xe 4 chỗ
+                    - Ngày sinh -> claim 
+                    - Nơi sinh -> claim
+                
+                Mua rượu ( >18t )
+                    - Kiểm tra ngày sinh -> Claims-based authorization
             
             /Areas/Admin/Pages/Role
             Index

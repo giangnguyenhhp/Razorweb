@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using ASP12_RazorPage_EntityFramework.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ASP12_RazorPage_EntityFramework.Areas.Admin.Pages.Role;
@@ -16,7 +17,9 @@ public class Edit : RolePageModel
         [StringLength(256, MinimumLength = 3, ErrorMessage = "{0} phải dài từ {2} đến {1} kí tự")]
         public string? Name { get; set; }
     }
+
     [BindProperty] public InputModel Input { get; set; }
+    public List<IdentityRoleClaim<string>> Claims { get; set; }
     public IdentityRole? Role { get; set; }
 
     public async Task<IActionResult> OnGetAsync(string? roleId)
@@ -30,16 +33,20 @@ public class Edit : RolePageModel
             {
                 Name = Role.Name
             };
+            Claims = await Context.RoleClaims.Where(x => x.RoleId == Role.Id).ToListAsync();
             return Page();
         }
 
         return NotFound("Không tìm thấy role");
     }
+
     public async Task<IActionResult> OnPostAsync(string? roleId)
     {
         if (roleId == null) return NotFound("Không tìm thấy role");
         Role = await RoleManager.FindByIdAsync(roleId);
-        if(Role==null) return NotFound("Không tìm thấy role");
+        if (Role == null) return NotFound("Không tìm thấy role");
+        Claims = await Context.RoleClaims.Where(x => x.RoleId == Role.Id).ToListAsync();
+
         if (!ModelState.IsValid)
         {
             return Page();

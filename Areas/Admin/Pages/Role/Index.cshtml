@@ -26,10 +26,16 @@
         <th>Tên Role (vai trò)</th>
         <th>Tác vụ</th>
     </tr>
-    @foreach (var role in Model.Roles)
+    @foreach (var role in Model.roles)
     {
         <tr>
-            <td class="">@role.Name</td>
+            <td class="">
+                <p>@role.Name</p>
+                @foreach (var claim in role.RoleClaims)
+                {
+                    <small class="">@claim</small><br/>
+                }         
+            </td>
             <td>
                 <a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-roleid="@role.Id">Cập nhật</a>
                 <a class="btn btn-success btn-sm" asp-page="./Delete" asp-route-roleid="@role.Id">Xóa</a>
