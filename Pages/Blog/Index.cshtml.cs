@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASP12_RazorPage_EntityFramework.Pages.Blog
 {
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly MasterDbContext _context;

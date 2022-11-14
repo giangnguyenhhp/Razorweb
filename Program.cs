@@ -1,7 +1,9 @@
 using System.Configuration;
 using System.Security.Claims;
 using ASP12_RazorPage_EntityFramework.Models;
+using ASP12_RazorPage_EntityFramework.Security.Requirements;
 using ASP12_RazorPage_EntityFramework.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ var mailSetting = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSetting);
 builder.Services.AddSingleton<IEmailSender, SendMailService>();
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
+builder.Services.AddTransient<IAuthorizationHandler, AppAuthorizationHandler>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -67,15 +70,16 @@ builder.Services.ConfigureApplicationCookie(options =>
 //Add Service Authorization Policy
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AllowEditRole", policyBuilder =>
+    options.AddPolicy("AllowEditRole", policyBuilder => //Admin/Role/Index
     {
         //Điều kiện của Policy
         policyBuilder.RequireAuthenticatedUser();
         policyBuilder.RequireRole("Admin");
         policyBuilder.RequireRole("Editor");
-        
+        policyBuilder.RequireClaim("Bằng Lái Xe", "Bằng B1");
+
         //Claims-based authorization
-        // policyBuilder.RequireClaim("ClaimName", "giatri1", "giatri2");
+        // policyBuilder.RequireClaim("ClaimType", "ClaimValue1", "giatri2");
         // policyBuilder.RequireClaim("ClaimType", new string[]
         // {
         //     "giatri1", "giatri2"
@@ -84,10 +88,22 @@ builder.Services.AddAuthorization(options =>
         // IdentityUserClaim<string> claim2;
         // Claim claim3;
     });
-    // options.AddPolicy("PolicyName2", policyBuilder =>
-    // {
-    //     //Điều kiện của Policy
-    // });
+    options.AddPolicy("InGenZ", policyBuilder => //Page/Blog/Details
+    {
+        //Điều kiện của Policy
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.Requirements.Add(new GenZRequirement()); //  GenZRequirement : IAuthorizationRequirement 
+        
+        //New GenZRequirement -> Authorization handler
+    });
+    options.AddPolicy("ShowAdminMenu", pb =>
+    {
+        pb.RequireRole("Admin");
+    });
+    options.AddPolicy("CanUpdate", pb =>
+    {
+        pb.Requirements.Add(new CanUpdateArticlesRequirement()); // CanUpdateArticlesRequirement : IAuthorizationRequirement
+    });
 });
 
 //Đăng kí Identity UI : giao diện mặc định hệ thống tự sinh ra

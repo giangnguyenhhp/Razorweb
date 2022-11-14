@@ -1,4 +1,5 @@
 using ASP12_RazorPage_EntityFramework.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ namespace ASP12_RazorPage_EntityFramework.Pages.Blog
     public class EditModel : PageModel
     {
         private readonly MasterDbContext _context;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EditModel(MasterDbContext context)
+        public EditModel(MasterDbContext context,IAuthorizationService authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [BindProperty]
@@ -46,7 +49,17 @@ namespace ASP12_RazorPage_EntityFramework.Pages.Blog
 
             try
             {
-                await _context.SaveChangesAsync();
+                //Kiểm tra quyền cập nhật
+                var canUpdate = await _authorizationService.AuthorizeAsync(User, Article, "CanUpdate");
+                
+                if (canUpdate.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return Content("không được quyền cập nhật");
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

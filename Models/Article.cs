@@ -24,4 +24,5 @@ public class Article
 
     [DisplayName("Nội dung")]
     public string? Content { get; set; }
+    
 }

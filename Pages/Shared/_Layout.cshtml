@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IAuthorizationService AuthozirationService
+@{
+    var result = await AuthozirationService.AuthorizeAsync(User, "ShowAdminMenu");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -28,10 +34,27 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/Blog/Index">Quản Lý Blog</a>
                     </li>
+                    @if (result.Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-page="/User/Index">Quản Lý User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-page="/Role/Index">Quản Lý Role</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-item nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" >
+                                Manage
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-dark">
+                                <a class="dropdown-item" asp-area="Admin" asp-page="/User/Index">Quản Lý User</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Admin" asp-page="/Role/Index">Quản Lý Role</a>
+                            </div>
+                        </li>
+                    }
                 </ul>
-                
                 <partial name="_LoginPartial"/>
-                
             </div>
         </div>
     </nav>
