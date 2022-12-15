@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ASP12_RazorPage_EntityFramework.Areas.Admin.Pages.Role;
 
 //Policy : Tao ra cac policy -> AllowEditRole
-[Authorize(Policy = "AllowEditRole")]
+// [Authorize(Policy = "AllowEditRole")]
 [Authorize(Roles = "Admin")]
 // [Authorize(Roles = "Admin")]     Phải có cả role Admin và Vip
 // [Authorize(Roles = "Vip")]       Phải có cả role Admin và Vip

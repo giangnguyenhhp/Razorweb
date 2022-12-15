@@ -106,6 +106,25 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        var gConfig = builder.Configuration.GetSection("Authentication:Google");
+        options.ClientId = gConfig["ClientId"] ?? string.Empty;
+        options.ClientSecret = gConfig["ClientSecret"] ?? string.Empty;
+        //https://localhost:5001/sigin-google
+        options.CallbackPath = "/dang-nhap-tu-google";
+    })
+    .AddFacebook(options =>
+    {
+        var fConfig = builder.Configuration.GetSection("Authentication:Facebook");
+        options.AppId = fConfig["AppId"] ?? string.Empty;
+        options.AppSecret = fConfig["AppSecret"] ?? string.Empty;
+        //https://localhost:5001/sigin-facebook
+        options.CallbackPath = "/dang-nhap-tu-facebook";
+    })
+    ;
+
 //Đăng kí Identity UI : giao diện mặc định hệ thống tự sinh ra
 // builder.Services.AddDefaultIdentity<User>()
 //     .AddEntityFrameworkStores<MasterDbContext>()
